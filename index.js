@@ -53,37 +53,7 @@ var ay = {
   targetList: []
 };
 
-//___________________________________________
-
-function generate_color(x, y, z) {
-  if (x < 1) {
-    x += 0.01;
-  } else {
-    x = 0;
-  }
-  if (y < 1) {
-    y += 0.01;
-  } else {
-    y = 0;
-  }
-  if (z < 1) {
-    z += 0.01;
-  } else {
-    z = 0;
-  }
-
-  return [x, y, z];
-}
-
-function getRandomColor() {
-  var letters = "0123433333000ccc".split("");
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-
-  return color;
-}
+//
 
 var baseMaterial = new THREE.MeshLambertMaterial({
   color: ay.colors.blank,
@@ -92,20 +62,210 @@ var baseMaterial = new THREE.MeshLambertMaterial({
   //map: couch_texture
 });
 
-//___________________________________________ KICK IT OFF
+// KICK IT OFF
 init();
 animate();
 
-//___________________________________________ INIT
+// INIT
 function init() {
   container = document.getElementById("container");
+  createCamera();
+  createControl();
+  createLights();
+  createRenderer();
+  createCouch();
+  createMonitor();
+  createMonitorScreen();
+  createLamp();
+  createBoy();
+  createCameraDiver();
+  // createDust();
+  createBookShelf();
+}
 
+// Only for Skinned Mesh Animation
+function ensureLoop(animation) {
+  for (var i = 0; i < animation.hierarchy.length; i++) {
+    var bone = animation.hierarchy[i];
+    var first = animation.data.hierarchy[0];
+    var last = animation.data.hierarchy[animation.data.hierarchy.length - 1];
+
+    last.pos = first.pos;
+    last.rot = first.rot;
+    last.scl = first.scl;
+  }
+}
+
+function clicker(obj) {
+  obj.parent.ex_bool = true;
+  obj.parent.children.forEach(function (el) {
+    explosion = new Explode(el);
+  });
+  console.log('ashas');
+}
+
+function Logic(mesh) {
+  this.ready = true;
+  this.reset_all_morphs = function () {
+    for (var i = 0; i < mesh.morphTargetInfluences.length; i++) {
+      mesh.morphTargetInfluences[i] = 0;
+    }
+  };
+  var curr = 0;
+  this.counter = 0;
+  var Presets = ["default", "eye_closed", "laugh", "mouth_open"];
+  this.set_specific_morph = function (type, intensity) {
+    var speed = 0.01;
+    switch (type) {
+      case "default":
+        this.reset_all_morphs();
+        mesh.morphTargetInfluences[0] = intensity * speed;
+        break;
+      case "eye_closed":
+        this.reset_all_morphs();
+        mesh.morphTargetInfluences[1] = intensity * speed;
+        break;
+      case "laugh":
+        this.reset_all_morphs();
+        mesh.morphTargetInfluences[2] = intensity * speed;
+        break;
+      case "mouth_open":
+        this.reset_all_morphs();
+        mesh.morphTargetInfluences[3] = intensity * speed;
+        break;
+    }
+  };
+  this.direction = 1;
+  this.loop_all_morphs = function (time) {
+    if (this.counter % 50 == 0) {
+      this.direction *= -1;
+    }
+    if (this.counter <= 0) {
+      this.direction *= -1;
+      if (curr < Presets.length) {
+        curr++;
+      } else {
+        curr = 0;
+      }
+    }
+    this.set_specific_morph(Presets[curr], this.counter);
+    this.counter += 4 * this.direction;
+  };
+
+  return;
+}
+
+// Event in Space
+document.addEventListener("mousedown", onDocumentMouseDown, true);
+document.addEventListener("mousemove", onDocumentMouseMove, false);
+window.addEventListener("resize", onWindowResize, false);
+document.addEventListener( 'mousemove', onPointerMove );
+controls.addEventListener( 'change', onPointerMove );
+
+function onPointerMove( event ) {
+  pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
+// click
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+var pointer = new THREE.Vector2();
+var lampInitColor = lamp_light.color.getHex();
+
+function onDocumentMouseDown(event) {
+  ay.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  ay.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  // find intersections
+
+  raycaster.setFromCamera( pointer, camera );
+  var intersects = raycaster.intersectObjects(scene.children);
+  if ( intersects.length > 0 ) {
+    if ( intersects[0].object.name == 'lamp' ) {
+      var currentHex = parseInt(lamp_light.color.getHex());
+      if(currentHex === lampInitColor) {
+        console.log('on');
+        lamp_light.color.setHex(0x000000);
+      } else {
+        console.log('off');
+        lamp_light.color.setHex(lampInitColor);
+      }
+    }
+  }
+}
+// move
+function onDocumentMouseMove(event) {
+  ay.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  ay.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  // find intersections
+  var vector = new THREE.Vector3(ay.mouse.x, ay.mouse.y, 1);
+  vector.unproject(camera);
+  var ray = new THREE.Raycaster(
+    camera.position,
+    vector.sub(camera.position).normalize()
+  );
+
+  // if (intersects.length > 0) {
+  //   console.log('move');
+  //   mover(intersects[0].object);
+  // }
+  // if (typeof morph_logic != "undefined") {
+  //   morph_logic.loop_all_morphs(time);
+  // }
+}
+
+// RENDER
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  render();
+}
+
+function render(time) {
+  theta += 0.1;
+  var delta = 0.75 * clock.getDelta();
+
+  if (ay.ready) {
+    // circle.update(time);
+    videoImageContext.drawImage(video, 0, 0, 640, 320);
+    if (videoTexture) {
+      videoTexture.needsUpdate = true;
+    }
+  }
+
+  // update morph
+
+  if (typeof animation !== "undefined") {
+    var keyframe = Math.floor(time / interpolation) + animOffset;
+
+    morph_logic.loop_all_morphs(time);
+
+    THREE.AnimationHandler.update(delta / interpolation);
+
+    var time = Date.now();
+    prevTime = time;
+  }
+
+  camera.lookAt(new THREE.Vector3(0, 20, 0));
+  renderer.render(scene, camera);
+}
+
+
+// Camera
+function createCamera() {
   camera = new THREE.PerspectiveCamera(
     30,
     window.innerWidth / window.innerHeight,
     0.1,
     10000
   );
+  camera.name = 'camera';
   camera.position.x = -305;
   camera.position.y = 55;
   camera.position.z = -65;
@@ -114,8 +274,10 @@ function init() {
   //scene.fog = new THREE.FogExp2( 0x000000, 0.015 );
   ay.ready.count++;
   scene.add(camera);
+}
 
-  //___________________________________________ CONTROLS
+// Controls
+function createControl() {
   controls = new THREE.OrbitControls(camera);
   controls.damping = 0.2;
   controls.addEventListener("change", render);
@@ -124,9 +286,10 @@ function init() {
   controls.target = new THREE.Vector3(0, 50, 0);
 
   ay.ready.count++;
+}
 
-  //___________________________________________ HEMI
-
+// Lights
+function createLights() {
   var ambient = new THREE.AmbientLight(0x111111);
 
   scene.add(ambient);
@@ -135,7 +298,7 @@ function init() {
   light.position.set(15, 15, 68).multiplyScalar(1);
   scene.add(light);
 
-  //___________________________________________ FAKE LIGHT
+  // FAKE LIGHT
   fake_light = new THREE.SpotLight(0x1a5970, 15, 200, Math.PI / 2);
   fake_light.position.set(15, 150, 268).multiplyScalar(1);
   scene.add(fake_light);
@@ -158,16 +321,17 @@ function init() {
 
   ay.ready.count++;
   // LAMP
-  lamp_light = new THREE.SpotLight(0xf0c043, 0.25);
+  lamp_light = new THREE.SpotLight(0xf0c043, 1);
   lamp_light.position.set(-55, 50, -50).multiplyScalar(1);
   scene.add(lamp_light);
   lamp_light.target.position.set(-55, 0, -50);
   lamp_light.target.updateMatrixWorld();
 
   ay.ready.count++;
+}
 
-  // RENDERER
-
+// Renderer
+function createRenderer() {
   renderer = new THREE.WebGLRenderer({
     antialias: true,
     transparent: true,
@@ -180,12 +344,16 @@ function init() {
   renderer.shadowMapEnabled = true;
 
   ay.ready.count++;
-  //__________________________________ LOAD MODEL
+}
 
-  var loader = new THREE.JSONLoader(true);
+var loader = new THREE.JSONLoader(true);
+
+// Couch
+function createCouch() {
+  loader = new THREE.JSONLoader(true);
   loader.load(ay.models.couch, function (geometry) {
     couch = new THREE.Mesh(geometry, baseMaterial);
-
+    couch.name = 'couch';
     couch.scale.set(20, 20, 20);
 
     couch.receiveShadow = true;
@@ -195,23 +363,27 @@ function init() {
 
     ay.ready.count++;
   });
+}
 
-  var loader = new THREE.JSONLoader(true);
+// Monitor
+function createMonitor() {
   loader.load(ay.models.monitor, function (geometry) {
     tv_monitor = new THREE.Mesh(geometry, baseMaterial);
 
+    tv_monitor.name = 'tv_monitor';
     tv_monitor.scale.set(20, 20, 20);
 
     tv_monitor.receiveShadow = true;
-    //tv_monitor.castShadow = true;
+    tv_monitor.castShadow = true;
     tv_monitor.position.y = -20;
     scene.add(tv_monitor);
 
     ay.ready.count++;
   });
+}
 
-  //___________________________________________ TV SCREEN
-
+// Monitor screen
+function createMonitorScreen() {
   var errorCallback = function (e) {
     console.log("Nope!", e);
   };
@@ -264,15 +436,20 @@ function init() {
     uvs[1][1].set(1, 1);
     uvs[1][2].set(0, 1);
     screen_mesh = new THREE.Mesh(geometry, material);
+    screen_mesh.name = 'screen_mesh';
     screen_mesh.scale.set(20, 20, 20);
     screen_mesh.position.y = -20;
     scene.add(screen_mesh);
 
     ay.ready.count++;
   });
-  //___________________________________________ Lamp
+}
+
+// Lamp
+function createLamp() {
   loader.load(ay.models.lamp, function (geometry, material) {
     screen = new THREE.Mesh(geometry, baseMaterial);
+    screen.name = 'lamp';
     screen.scale.set(20, 20, 20);
     screen.receiveShadow = true;
     screen.castShadow = true;
@@ -280,8 +457,10 @@ function init() {
     scene.add(screen);
     ay.ready.count++;
   });
-  //___________________________________________ Little Kid
+}
 
+// Boy
+function createBoy() {
   loader.load(ay.models.kid, function (geometry) {
     var kid_material = new THREE.MeshLambertMaterial({
       color: ay.colors.blank,
@@ -291,6 +470,7 @@ function init() {
     });
     little_kid = new THREE.SkinnedMesh(geometry, kid_material);
 
+    little_kid.name = 'little_kid';
     little_kid.scale.set(20, 20, 20);
 
     little_kid.receiveShadow = true;
@@ -304,9 +484,10 @@ function init() {
 
     ay.ready.count++;
   });
+}
 
-  //___________________________________________ Camera Driver
-
+// Camera drive
+function createCameraDiver() {
   var radius = 250;
   var segments = 32;
 
@@ -322,9 +503,10 @@ function init() {
   };
 
   ay.ready.count++;
+}
 
-  //___________________________________________ DUST
-
+// Dust
+function createDust() {
   var particles = new THREE.Geometry();
   var pMaterial = new THREE.PointCloudMaterial({
     color: 0xffffff,
@@ -343,9 +525,12 @@ function init() {
   scene.add(particleSystem_1);
 
   ay.ready.count++;
+}
 
-  //___________________________________________ BOOKSHELF
+// Bookshelf
+function createBookShelf() {
   var book_shelf = new THREE.Object3D();
+  book_shelf.name = 'book_shelf';
   var book_shelf_geometry = new THREE.BoxGeometry(1.5, 78, 15);
 
   var book_shelf_l = new THREE.Mesh(book_shelf_geometry, baseMaterial);
@@ -404,168 +589,11 @@ function init() {
   book_shelf.rotation.y = (90 * Math.PI) / 180;
 
   var second_shelf = book_shelf.clone();
+  second_shelf.name = 'second_shelf';
   second_shelf.position.z = 16;
   scene.add(second_shelf);
 
   scene.add(book_shelf);
 
   ay.ready = true;
-} // end of init
-// __________________________________ Only for Skinned Mesh Animation
-function ensureLoop(animation) {
-  for (var i = 0; i < animation.hierarchy.length; i++) {
-    var bone = animation.hierarchy[i];
-    var first = animation.data.hierarchy[0];
-    var last = animation.data.hierarchy[animation.data.hierarchy.length - 1];
-
-    last.pos = first.pos;
-    last.rot = first.rot;
-    last.scl = first.scl;
-  }
-}
-
-function clicker(obj) {
-  obj.parent.ex_bool = true;
-  obj.parent.children.forEach(function (el) {
-    explosion = new Explode(el);
-  });
-}
-
-function Logic(mesh) {
-  this.ready = true;
-  this.reset_all_morphs = function () {
-    for (var i = 0; i < mesh.morphTargetInfluences.length; i++) {
-      mesh.morphTargetInfluences[i] = 0;
-    }
-  };
-  var curr = 0;
-  this.counter = 0;
-  var Presets = ["default", "eye_closed", "laugh", "mouth_open"];
-  this.set_specific_morph = function (type, intensity) {
-    var speed = 0.01;
-    switch (type) {
-      case "default":
-        this.reset_all_morphs();
-        mesh.morphTargetInfluences[0] = intensity * speed;
-        break;
-      case "eye_closed":
-        this.reset_all_morphs();
-        mesh.morphTargetInfluences[1] = intensity * speed;
-        break;
-      case "laugh":
-        this.reset_all_morphs();
-        mesh.morphTargetInfluences[2] = intensity * speed;
-        break;
-      case "mouth_open":
-        this.reset_all_morphs();
-        mesh.morphTargetInfluences[3] = intensity * speed;
-        break;
-    }
-  };
-  this.direction = 1;
-  this.loop_all_morphs = function (time) {
-    if (this.counter % 50 == 0) {
-      this.direction *= -1;
-    }
-    if (this.counter <= 0) {
-      this.direction *= -1;
-      if (curr < Presets.length) {
-        curr++;
-      } else {
-        curr = 0;
-      }
-    }
-    this.set_specific_morph(Presets[curr], this.counter);
-    this.counter += 4 * this.direction;
-  };
-
-  return;
-}
-
-//___________________________________________ Event in Space
-document.addEventListener("mousedown", onDocumentMouseDown, false);
-document.addEventListener("mousemove", onDocumentMouseMove, false);
-window.addEventListener("resize", onWindowResize, false);
-//___________________________________________ click
-
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function onDocumentMouseDown(event) {
-  ay.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  ay.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  // find intersections
-  var vector = new THREE.Vector3(ay.mouse.x, ay.mouse.y, 1);
-  vector.unproject(camera);
-  var ray = new THREE.Raycaster(
-    camera.position,
-    vector.sub(camera.position).normalize()
-  );
-  var intersects = ray.intersectObjects(ay.targetList);
-  if (intersects.length > 0) {
-    clicker(intersects[0].object);
-  }
-}
-//___________________________________________ move
-
-function onDocumentMouseMove(event) {
-  ay.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  ay.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  // find intersections
-  var vector = new THREE.Vector3(ay.mouse.x, ay.mouse.y, 1);
-  vector.unproject(camera);
-  var ray = new THREE.Raycaster(
-    camera.position,
-    vector.sub(camera.position).normalize()
-  );
-
-  var intersects = ray.intersectObjects(ay.targetList);
-
-  if (intersects.length > 0) {
-    mover(intersects[0].object);
-  }
-  if (typeof morph_logic != "undefined") {
-    morph_logic.loop_all_morphs(time);
-  }
-}
-
-//___________________________________________ RENDER
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  render();
-}
-
-function render(time) {
-  theta += 0.1;
-  var delta = 0.75 * clock.getDelta();
-
-  if (ay.ready) {
-    circle.update(time);
-    videoImageContext.drawImage(video, 0, 0, 640, 320);
-    if (videoTexture) {
-      videoTexture.needsUpdate = true;
-    }
-  }
-
-  // update morph
-
-  if (typeof animation !== "undefined") {
-    var keyframe = Math.floor(time / interpolation) + animOffset;
-
-    morph_logic.loop_all_morphs(time);
-
-    THREE.AnimationHandler.update(delta / interpolation);
-
-    var time = Date.now();
-    prevTime = time;
-  }
-
-  camera.lookAt(new THREE.Vector3(0, 20, 0));
-  renderer.render(scene, camera);
 }
