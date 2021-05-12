@@ -14,8 +14,7 @@ html, body {
 body {
   font-size: 80%;
   font-weight: lighter;
-  /* background: radial-gradient(#1A5970 0%, #000 100%); */
-  background: linear-gradient(to bottom right, #95cff5, #4e97c7);
+  background: radial-gradient(#1A5970 0%, #000 100%);
   overflow: hidden;
 }
 

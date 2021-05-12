@@ -1,0 +1,485 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 4671,
+      "max": [
+        1.4228963851928711,
+        8.0363578796386719,
+        1.0581570863723755
+      ],
+      "min": [
+        -1.1494539976119995,
+        -0.0026134457439184189,
+        -0.69307041168212891
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 56052,
+      "componentType": 5126,
+      "count": 4671,
+      "max": [
+        1.0480692386627197,
+        0.99818474054336548,
+        0.9996417760848999
+      ],
+      "min": [
+        -1.0419937372207642,
+        -0.99999558925628662,
+        -0.99980223178863525
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 4671,
+      "max": [
+        0.99923187494277954,
+        0.99969208240509033,
+        0.99729663133621216,
+        1
+      ],
+      "min": [
+        -0.99987345933914185,
+        -0.99984246492385864,
+        -0.99999487400054932,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 10704,
+      "max": [
+        4670
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 112104,
+      "componentType": 5126,
+      "count": 4607,
+      "max": [
+        0.70332813262939453,
+        0.40954884886741638,
+        3.6079716682434082
+      ],
+      "min": [
+        -0.6594509482383728,
+        -0.32914063334465027,
+        -0.0023527687881141901
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 167388,
+      "componentType": 5126,
+      "count": 4607,
+      "max": [
+        0.99970942735671997,
+        0.99978131055831909,
+        0.99228745698928833
+      ],
+      "min": [
+        -0.99959641695022583,
+        -0.99986356496810913,
+        -0.99999481439590454
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 74736,
+      "componentType": 5126,
+      "count": 4607,
+      "max": [
+        0.99914991855621338,
+        0.99983972311019897,
+        0.99982935190200806,
+        1
+      ],
+      "min": [
+        -0.99751722812652588,
+        -0.99905043840408325,
+        -0.99939388036727905,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 42816,
+      "componentType": 5125,
+      "count": 10776,
+      "max": [
+        4606
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 1,
+      "max": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "min": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "type": "MAT4"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 64,
+      "componentType": 5126,
+      "count": 1,
+      "max": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "min": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "type": "MAT4"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "dacancino (https://sketchfab.com/dacancino)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/models/15a1d670d29b4195a10c23dca0d13da9",
+      "title": "PLANAR HUMAN BASE RIGS"
+    },
+    "generator": "Sketchfab-3.18.5",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 85920,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 222672,
+      "byteOffset": 85920,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 148448,
+      "byteOffset": 308592,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 128,
+      "byteOffset": 457040,
+      "byteStride": 64,
+      "name": "floatBufferViews"
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 457168,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "sculpture",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "sculpture.001",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "bodyMesh.002_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2
+          },
+          "indices": 3,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "bodyMesh_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TANGENT": 6
+          },
+          "indices": 7,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.99998706579208374,
+        0.0050882766954600811,
+        0,
+        0,
+        -0.0050882766954600811,
+        0.99998706579208374,
+        0,
+        0,
+        0.0091727711260318756,
+        0.0001792148977983743,
+        1
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3,
+        7
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "matrix": [
+        1.71573,
+        0,
+        0,
+        0,
+        0,
+        1.71573,
+        0,
+        0,
+        0,
+        0,
+        1.71573,
+        0,
+        2.9522499999999994,
+        0,
+        0,
+        1
+      ],
+      "name": "rig.001"
+    },
+    {
+      "name": "rig.001_rootJoint"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        0.25933,
+        0,
+        0,
+        0,
+        0,
+        -0,
+        0.25933,
+        0,
+        0,
+        -0.25933,
+        -0,
+        0,
+        -0,
+        0,
+        0,
+        1
+      ],
+      "name": "bodyMesh.002"
+    },
+    {
+      "mesh": 0,
+      "name": "bodyMesh.002_0"
+    },
+    {
+      "children": [
+        8,
+        9
+      ],
+      "name": "rig"
+    },
+    {
+      "name": "rig_rootJoint"
+    },
+    {
+      "children": [
+        10
+      ],
+      "name": "bodyMesh"
+    },
+    {
+      "mesh": 1,
+      "name": "bodyMesh_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "skins": [
+    {
+      "inverseBindMatrices": 8,
+      "joints": [
+        4
+      ],
+      "skeleton": 4
+    },
+    {
+      "inverseBindMatrices": 9,
+      "joints": [
+        8
+      ],
+      "skeleton": 8
+    }
+  ]
+}
+
