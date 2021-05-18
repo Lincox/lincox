@@ -30,11 +30,11 @@ function init() {
   scene.background = new THREE.Color(0xa0a0a0);
   scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+  const hemiLight = new THREE.HemisphereLight(0xd1d1d1, 0x444444);
   hemiLight.position.set(0, 200, 0);
   scene.add(hemiLight);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff);
+  const dirLight = new THREE.DirectionalLight(0xd1d1d1);
   dirLight.position.set(0, 200, 100);
   dirLight.castShadow = true;
   dirLight.shadow.camera.top = 180;
